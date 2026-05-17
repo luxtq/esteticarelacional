@@ -706,28 +706,6 @@
       color: #9ab89a;
     }
 
-    /* upload area */
-    .ipod-upload {
-      background: rgba(255, 255, 255, .07);
-      border: 1px dashed rgba(200, 169, 126, .4);
-      border-radius: 6px;
-      padding: 8px;
-      margin: 6px 0;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .ipod-upload label {
-      font-size: .65rem;
-      color: var(--accent2);
-      cursor: pointer;
-      display: block;
-    }
-
-    .ipod-upload input {
-      display: none;
-    }
-
     /* click wheel */
     .cwheel {
       width: 130px;
@@ -1008,13 +986,6 @@
             </div>
             <div id="ipod-screen-content"></div>
           </div>
-          <!-- zona de subida de audio -->
-          <div class="ipod-upload">
-            <label>
-              ♪ Añadir canciones (mp3/ogg/wav)
-              <input type="file" id="audio-input" multiple accept="audio/*" onchange="loadAudioFiles(this)" />
-            </label>
-          </div>
           <!-- click wheel -->
           <div class="cwheel">
             <span class="cwheel-btn cw-top" onclick="ipodAction('menu')">MENU</span>
@@ -1083,7 +1054,7 @@
     { name: "Para hacerlo con amor - Dodo", url: "audio/La ultima vez.mp3" },
     { name: "Cupido - Dodo", url: "audio/Cupido.mp3" }, { name: "Fantasía - Dodo", url: "audio/Fantasia.mp3" },];      // {name, url (blob URL)}
     let curTrack = 0;
-    let ipodScreen = 'now'; // 'now' | 'menu' | 'songs'
+    let ipodScreen = 'menu'; // 'menu' | 'now' | 'songs'
     let ipodMenuSel = 0;
     let progressTimer = null;
 
@@ -1107,24 +1078,53 @@
       ipodRender();
     }
 
+    function setIpodMessage(msg) {
+      const sc = document.getElementById('ipod-screen-content');
+      if (!sc) return;
+      sc.innerHTML = `<div class="ipod-menu-screen" style="padding:6px;font-size:.6rem;color:#0a2a0a">${msg}</div>`;
+    }
+
     function playTrack(i) {
       if (!tracks.length) return;
-      player.src = tracks[i].url;
-      player.play().catch(() => { });
+      curTrack = i;
+
+      // Si todavía no había ninguna canción cargada en el <audio>,
+      // o si cambiamos de canción, cargamos la ruta antes de darle a play.
+      if (!player.src || !player.src.endsWith(tracks[i].url.replace(/^\.\//, ''))) {
+        player.src = tracks[i].url;
+      }
+
+      player.play().catch(() => {
+        setIpodMessage('No se pudo reproducir. Revisa que el archivo exista en la carpeta audio/ y que el nombre coincida exactamente.');
+      });
       ipodRender();
     }
+
+    player.addEventListener('error', () => {
+      setIpodMessage('No encuentro esta canción. Revisa mayúsculas, espacios y acentos en la carpeta audio/.');
+    });
 
     function ipodAction(a) {
       if (a === 'menu') {
         ipodScreen = ipodScreen === 'now' ? 'menu' : 'now';
       } else if (a === 'play') {
         if (!tracks.length) { ipodScreen = 'now'; ipodRender(); return; }
+        ipodScreen = 'now';
+
+        // Si es la primera vez que pulsas play, player.src está vacío.
+        // Cargamos la canción actual antes de intentar reproducirla.
+        if (!player.src) {
+          playTrack(curTrack);
+          return;
+        }
+
         if (player.paused) {
-          player.play().catch(() => { });
+          player.play().catch(() => {
+            setIpodMessage('No se pudo reproducir. Revisa que el archivo exista en la carpeta audio/.');
+          });
         } else {
           player.pause();
         }
-        ipodScreen = 'now';
       } else if (a === 'next') {
         if (ipodScreen === 'menu') { ipodMenuSel = (ipodMenuSel + 1) % 3; }
         else { curTrack = (curTrack + 1) % Math.max(tracks.length, 1); if (tracks.length) playTrack(curTrack); }
@@ -1197,7 +1197,40 @@
     const S = window.storage || localStore;
     let entries = [], wallPosts = [];
 
+    async function loadEntriesFromNotas() {
+      // Las notas se editan en un archivo externo llamado notas.html.
+      // Debe estar en la misma carpeta que index.html en GitHub Pages.
+      const response = await fetch('notas.html', { cache: 'no-cache' });
+      if (!response.ok) throw new Error('No se pudo cargar notas.html');
+
+      const html = await response.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const notas = Array.from(doc.querySelectorAll('article.nota'));
+
+      if (!notas.length) throw new Error('notas.html no contiene artículos con class="nota"');
+
+      return notas.map((nota, i) => {
+        const titleEl = nota.querySelector('h1, h2, h3, .titulo');
+        const timeEl = nota.querySelector('time');
+        const bodyEl = nota.querySelector('.contenido') || nota.querySelector('.body') || nota;
+
+        const title = (nota.dataset.title || (titleEl ? titleEl.textContent : '') || `Nota ${i + 1}`).trim();
+        const date = (nota.dataset.date || (timeEl ? timeEl.getAttribute('datetime') || timeEl.textContent : '') || new Date().toISOString().slice(0, 10)).trim();
+        const id = Number(nota.dataset.id) || i + 1;
+        const bodyText = bodyEl.textContent.trim();
+        const bodyHTML = bodyEl.innerHTML.trim();
+
+        return { id, title, date, body: bodyText, html: bodyHTML };
+      });
+    }
+
     async function loadEntries() {
+      try {
+        return await loadEntriesFromNotas();
+      } catch (e) {
+        console.warn('Usando notas de reserva porque no se pudo leer notas.html:', e);
+      }
+
       try {
         const r = await S.get('diary:entries');
         return r ? JSON.parse(r.value) : samples();
@@ -1260,7 +1293,18 @@
 
     // ── WINDOWS ───────────────────────────────────────────────────
     let zTop = 200;
-    function openWin(id) { const w = document.getElementById(id); w.classList.add('open'); w.style.display = 'flex'; w.style.zIndex = ++zTop; }
+    function openWin(id) {
+      const w = document.getElementById(id);
+      w.classList.add('open');
+      w.style.display = 'flex';
+      w.style.zIndex = ++zTop;
+
+      if (id === 'win-ipod') {
+        ipodScreen = 'menu';
+        ipodMenuSel = 0;
+        ipodRender();
+      }
+    }
     function closeWin(id) { const w = document.getElementById(id); w.classList.remove('open'); w.style.display = 'none'; }
 
     document.querySelectorAll('.wbar').forEach(bar => {
@@ -1315,8 +1359,9 @@
     }
     function openReader(id) {
       const e = entries.find(x => x.id === id); if (!e) return;
+      const content = e.html || esc(e.body);
       document.getElementById('wbody-reader').innerHTML =
-        `<div class="r-title">${e.title}</div><div class="r-date">${fmtDate(e.date)}</div><div class="r-body">${e.body}</div>`;
+        `<div class="r-title">${esc(e.title)}</div><div class="r-date">${fmtDate(e.date)}</div><div class="r-body">${content}</div>`;
       openWin('win-reader');
     }
 
