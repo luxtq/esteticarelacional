@@ -1176,17 +1176,51 @@
     setInterval(() => { if (ipodScreen === 'now') ipodRender(); }, 500);
 
     // ── STORAGE ───────────────────────────────────────────────────
-    const S = window.storage;
+    // Compatible con GitHub Pages:
+    // - Si existe window.storage, lo usa.
+    // - Si no existe, usa localStorage del navegador.
+    const localStore = {
+      async get(key) {
+        const value = localStorage.getItem(key);
+        return value === null ? null : { value };
+      },
+      async set(key, value) {
+        localStorage.setItem(key, value);
+      }
+    };
+
+    const S = window.storage || localStore;
     let entries = [], wallPosts = [];
 
     async function loadEntries() {
-      try { const r = await S.get('diary:entries'); return r ? JSON.parse(r.value) : samples(); } catch { return samples(); }
+      try {
+        const r = await S.get('diary:entries');
+        return r ? JSON.parse(r.value) : samples();
+      } catch {
+        return samples();
+      }
     }
-    async function saveEntries() { try { await S.set('diary:entries', JSON.stringify(entries)); } catch (e) { } }
+
+    async function saveEntries() {
+      try {
+        await S.set('diary:entries', JSON.stringify(entries));
+      } catch (e) { }
+    }
+
     async function loadWall() {
-      try { const r = await S.get('diary:wall', true); return r ? JSON.parse(r.value) : []; } catch { return []; }
+      try {
+        const r = await S.get('diary:wall');
+        return r ? JSON.parse(r.value) : [];
+      } catch {
+        return [];
+      }
     }
-    async function saveWall() { try { await S.set('diary:wall', JSON.stringify(wallPosts), true); } catch (e) { } }
+
+    async function saveWall() {
+      try {
+        await S.set('diary:wall', JSON.stringify(wallPosts));
+      } catch (e) { }
+    }
 
     function samples() {
       return [
@@ -1312,14 +1346,14 @@
         const ds = `${calY}-${String(calM + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         const iT = today.getFullYear() === calY && today.getMonth() === calM && today.getDate() === d;
         const hE = edates.has(ds);
-        html += `<div class="cal-day${iT ? ' today' : ''}${hE ? ' has-entry' : ''}" onclick="calSelect('${ds}')">${d}</div>`;
+        html += `<div class="cal-day${iT ? ' today' : ''}${hE ? ' has-entry' : ''}" onclick="calSelect('${ds}', this)">${d}</div>`;
       }
       grid.innerHTML = html;
       document.getElementById('cal-res').innerHTML = '';
     }
-    function calSelect(ds) {
+    function calSelect(ds, targetEl) {
       document.querySelectorAll('.cal-day').forEach(el => el.classList.remove('selected'));
-      event.target.classList.add('selected');
+      if (targetEl) targetEl.classList.add('selected');
       const res = entries.filter(e => e.date === ds);
       const el = document.getElementById('cal-res');
       el.innerHTML = res.length
