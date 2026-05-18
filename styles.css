@@ -4,7 +4,6 @@
   box-sizing: border-box;
 }
 
-
 :root {
   --bg: #1a1a1f;
   --win-bg: #1e1e24;
@@ -16,10 +15,23 @@
   --text: #e8e0d0;
   --text2: #a09880;
   --text3: #6a6050;
-  --ms-blue: #003399;
-  --ms-pink: #ff69b4;
-  --ms-bg: #e8d5f0;
   --radius: 10px;
+  --desktop-icon-size: 58px;
+  --mac-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* ── MURO: colores temáticos ──────────────────────────────
+     Cambia estas variables para re-colorear todo el muro
+     de una sola vez.
+     ───────────────────────────────────────────────────────── */
+  --wall-bg: #f5e8f0;
+  --wall-dot-color: #d4a8c4;
+  --wall-accent: #8b4a6b;
+  --wall-accent2: #c47a9b;
+  --wall-border: #d4a8c4;
+  --wall-card-bg: rgba(255, 255, 255, .88);
+  --wall-text: #4a2040;
+  --wall-text2: #8b6080;
+  --wall-font: 'Courier New', Courier, monospace;
 }
 
 html,
@@ -31,11 +43,22 @@ body {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--mac-font);
   color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
 }
 
-/* BOOT */
+/* Todas las ventanas y controles heredan también la fuente del sistema */
+button,
+input,
+textarea,
+select {
+  font-family: var(--mac-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── BOOT ──────────────────────────────────────────────────── */
 #boot {
   position: fixed;
   inset: 0;
@@ -49,7 +72,6 @@ body {
 }
 
 #boot h1 {
-  font-family: 'Special Elite', monospace;
   font-size: 2rem;
   color: var(--accent);
   letter-spacing: 6px;
@@ -60,7 +82,6 @@ body {
   font-size: .8rem;
   color: var(--text2);
   margin-bottom: 2rem;
-  font-family: 'Courier Prime', monospace;
 }
 
 .boot-bar {
@@ -85,7 +106,7 @@ body {
   }
 }
 
-/* DESKTOP */
+/* ── DESKTOP ───────────────────────────────────────────────── */
 #desktop {
   position: relative;
   width: 100vw;
@@ -104,7 +125,7 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* MENUBAR */
+/* ── MENUBAR ───────────────────────────────────────────────── */
 #menubar {
   position: fixed;
   top: 0;
@@ -121,30 +142,49 @@ body {
 }
 
 #menubar-title {
-  font-family: 'Special Elite', monospace;
   font-size: .72rem;
   color: var(--accent);
-  letter-spacing: 2px;
+  letter-spacing: .3px;
+  font-weight: 600;
   margin-right: auto;
 }
 
 #clock {
   font-size: .68rem;
   color: var(--text2);
-  letter-spacing: .5px;
+  letter-spacing: .3px;
+  font-weight: 500;
 }
 
-/* DESKTOP ICONS — posición absoluta libre */
+/* ── DESKTOP ICONS ─────────────────────────────────────────── */
+/*
+  Para cambiar el tamaño de TODOS los iconos:
+    → edita --desktop-icon-size en :root (arriba)
+
+  Para cambiar UN icono específico, usa su clase modificadora:
+    .dsk-icon--entries  → Notas
+    .dsk-icon--search   → Buscador
+    .dsk-icon--cal      → Calendario
+    .dsk-icon--ipod     → iPod
+    .dsk-icon--gallery  → Galería
+
+  Ejemplo: hacer el iPod más grande
+    .dsk-icon--ipod .dsk-icon-img { width: 72px !important; height: 72px !important; }
+
+  Para cambiar la POSICIÓN de un icono:
+    .dsk-icon--entries { top: 52px; left: 28px; }
+*/
 .dsk-icon {
   position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 7px;
   cursor: pointer;
-  padding: 8px;
+  padding: 8px 6px;
   border-radius: 8px;
-  width: 76px;
+  width: 88px;
+  min-height: 90px;
   transition: background .15s;
   user-select: none;
 }
@@ -154,29 +194,64 @@ body {
 }
 
 .dsk-icon-img {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
+  width: var(--desktop-icon-size);
+  height: var(--desktop-icon-size);
+  min-width: var(--desktop-icon-size);
+  min-height: var(--desktop-icon-size);
+  border-radius: 14px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
-  line-height: 1;
-  /* ─────────────────────────────────────────────────────────────────
-     ICONOS: reemplaza el emoji por una etiqueta <img> así:
-     <img src="ruta/a/tu-imagen.png" style="width:48px;height:48px;border-radius:10px;object-fit:cover"/>
-     El emoji se muestra con la propiedad 'data-emoji' del span interior.
-     ───────────────────────────────────────────────────────────────── */
+  font-size: 42px;
+  flex-shrink: 0;
+}
+
+.dsk-icon-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 14px;
+  display: block;
 }
 
 .dsk-icon-lbl {
-  font-size: .62rem;
-  color: white;
+  width: 100%;
+  font-size: 12px;
+  line-height: 1.15;
+  font-weight: 500;
+  color: #fff;
   text-align: center;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, .8);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .75);
 }
 
-/* WINDOWS */
+/* Posiciones de cada icono */
+.dsk-icon--entries {
+  top: 52px;
+  left: 28px;
+}
+
+.dsk-icon--search {
+  top: 160px;
+  left: 90px;
+}
+
+.dsk-icon--cal {
+  top: 257px;
+  left: 150px;
+}
+
+.dsk-icon--ipod {
+  top: 270px;
+  left: 22px;
+}
+
+.dsk-icon--gallery {
+  top: 393px;
+  left: 155px;
+}
+
+/* ── WINDOWS ───────────────────────────────────────────────── */
 .win {
   position: absolute;
   display: none;
@@ -192,6 +267,56 @@ body {
 
 .win.open {
   display: flex;
+}
+
+/* Tamaños y posiciones iniciales de cada ventana */
+#win-entries {
+  width: 360px;
+  height: 440px;
+  top: 60px;
+  left: 140px;
+}
+
+#win-reader {
+  width: 400px;
+  height: 460px;
+  top: 80px;
+  left: 220px;
+}
+
+#win-search {
+  width: 320px;
+  height: 380px;
+  top: 55px;
+  left: 520px;
+}
+
+#win-cal {
+  width: 310px;
+  height: 460px;
+  top: 70px;
+  left: 360px;
+}
+
+#win-ipod {
+  width: 240px;
+  height: 430px;
+  top: 55px;
+  left: 600px;
+}
+
+#win-wall {
+  width: 380px;
+  height: 480px;
+  top: 62px;
+  left: 440px;
+}
+
+#win-gallery {
+  width: 520px;
+  height: 440px;
+  top: 82px;
+  left: 300px;
 }
 
 .wbar {
@@ -235,7 +360,7 @@ body {
   text-align: center;
   font-size: .72rem;
   color: var(--text2);
-  letter-spacing: .5px;
+  letter-spacing: 0;
   pointer-events: none;
 }
 
@@ -275,12 +400,11 @@ body {
   color: var(--text3);
 }
 
-/* ENTRIES */
+/* ── ENTRIES ───────────────────────────────────────────────── */
 .month-hdr {
-  font-family: 'Special Elite', monospace;
   font-size: .7rem;
   color: var(--accent);
-  letter-spacing: 3px;
+  letter-spacing: 0;
   text-transform: uppercase;
   border-bottom: 1px solid var(--win-border);
   padding-bottom: 5px;
@@ -308,22 +432,20 @@ body {
 .ecard-date {
   font-size: .65rem;
   color: var(--accent2);
-  font-family: 'Courier Prime', monospace;
   margin-bottom: 2px;
 }
 
 .ecard-title {
   font-size: .88rem;
   color: var(--text);
-  font-family: 'Special Elite', monospace;
   margin-bottom: 3px;
+  letter-spacing: 0;
 }
 
 .ecard-prev {
   font-size: .75rem;
   color: var(--text2);
   font-style: italic;
-  font-family: 'IM Fell English', serif;
   line-height: 1.4;
 }
 
@@ -332,28 +454,25 @@ body {
   color: var(--text3);
   text-align: center;
   padding: 24px;
-  font-family: 'Courier Prime', monospace;
   font-style: italic;
 }
 
-/* READER */
+/* ── READER ────────────────────────────────────────────────── */
 #wbody-reader {
-  font-family: 'IM Fell English', serif;
   line-height: 1.85;
   color: var(--text);
 }
 
 .r-title {
-  font-family: 'Special Elite', monospace;
   font-size: 1.2rem;
   color: var(--accent);
   margin-bottom: 4px;
+  letter-spacing: 0;
 }
 
 .r-date {
   font-size: .7rem;
   color: var(--accent2);
-  font-family: 'Courier Prime', monospace;
   border-bottom: 1px solid var(--win-border);
   padding-bottom: 10px;
   margin-bottom: 14px;
@@ -364,7 +483,7 @@ body {
   white-space: pre-wrap;
 }
 
-/* SEARCH */
+/* ── SEARCH ────────────────────────────────────────────────── */
 .sinput {
   width: 100%;
   background: rgba(255, 255, 255, .06);
@@ -381,7 +500,7 @@ body {
   border-color: var(--accent2);
 }
 
-/* CALENDAR */
+/* ── CALENDAR ──────────────────────────────────────────────── */
 .cal-nav {
   display: flex;
   align-items: center;
@@ -390,7 +509,6 @@ body {
 }
 
 .cal-month-lbl {
-  font-family: 'Special Elite', monospace;
   font-size: .9rem;
   color: var(--accent);
 }
@@ -478,103 +596,7 @@ body {
   pointer-events: none;
 }
 
-/* MYSPACE WALL */
-#win-wall .wbar {
-  background: linear-gradient(180deg, #0044cc, #002288) !important;
-  border-bottom: 1px solid #0055ff;
-}
-
-#wbody-wall {
-  background: var(--ms-bg);
-  background-image: radial-gradient(circle, #cc99ff22 1px, transparent 1px);
-  background-size: 20px 20px;
-}
-
-.wall-h {
-  font-family: 'Comic Sans MS', cursive;
-  font-size: 1.1rem;
-  color: var(--ms-blue);
-  text-align: center;
-  margin-bottom: 3px;
-  text-shadow: 1px 1px 0 var(--ms-pink);
-}
-
-.wall-sub {
-  font-family: 'Comic Sans MS', cursive;
-  font-size: .65rem;
-  color: #888;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.wall-form {
-  background: rgba(255, 255, 255, .8);
-  border: 2px solid var(--ms-blue);
-  border-radius: 6px;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.wall-form input,
-.wall-form textarea {
-  width: 100%;
-  border: 1px solid #aaa;
-  border-radius: 3px;
-  padding: 5px 7px;
-  font-family: 'Comic Sans MS', cursive;
-  font-size: .78rem;
-  margin-bottom: 5px;
-  background: #fff;
-  color: #330066;
-  outline: none;
-  resize: vertical;
-}
-
-.wall-form textarea {
-  min-height: 55px;
-}
-
-.wall-btn {
-  background: linear-gradient(180deg, #6699ff, #003399);
-  color: #fff;
-  border: none;
-  padding: 5px 14px;
-  border-radius: 3px;
-  font-family: 'Comic Sans MS', cursive;
-  font-size: .75rem;
-  cursor: pointer;
-}
-
-.wall-note {
-  background: #fff;
-  border: 2px solid var(--ms-pink);
-  border-radius: 6px;
-  padding: 9px;
-  margin-bottom: 8px;
-}
-
-.wall-name {
-  font-family: 'Comic Sans MS', cursive;
-  font-weight: 700;
-  color: var(--ms-blue);
-  font-size: .82rem;
-}
-
-.wall-date {
-  font-family: 'Comic Sans MS', cursive;
-  font-size: .6rem;
-  color: #999;
-  margin-bottom: 4px;
-}
-
-.wall-text {
-  font-family: 'Comic Sans MS', cursive;
-  font-size: .77rem;
-  color: #330066;
-  line-height: 1.5;
-}
-
-/* iPOD */
+/* ── iPOD ──────────────────────────────────────────────────── */
 #win-ipod .wbar {
   background: linear-gradient(180deg, #3a3a3e, #222224) !important;
 }
@@ -635,13 +657,11 @@ body {
   font-weight: 700;
   color: #0a2a0a;
   margin-bottom: 1px;
-  font-family: sans-serif;
 }
 
 .ipod-artist {
   font-size: .6rem;
   color: #2a4a2a;
-  font-family: sans-serif;
 }
 
 .ipod-progress {
@@ -668,7 +688,6 @@ body {
 .ipod-menu-screen {
   font-size: .62rem;
   color: #0a2a0a;
-  font-family: sans-serif;
 }
 
 .ipod-menu-item {
@@ -695,7 +714,6 @@ body {
   color: #9ab89a;
 }
 
-/* click wheel */
 .cwheel {
   width: 130px;
   height: 130px;
@@ -766,7 +784,186 @@ body {
   transform: translateY(-50%);
 }
 
-/* DOCK */
+/* ── MURO — estilo Spacehey/MySpace ────────────────────────────
+   GUÍA DE PERSONALIZACIÓN:
+
+   [A] Barra de la ventana        → #win-wall .wbar
+   [B] Fondo del muro             → #wbody-wall (background + background-image)
+   [C] Patrón de puntos           → edita el radial-gradient en #wbody-wall
+   [D] Título "COMENTARIOS..."    → .wall-h  (color, font-size, letter-spacing)
+   [E] Subtítulo                  → .wall-sub
+   [F] Caja del formulario        → .wall-form (background, border)
+   [G] Inputs / Textarea          → .wall-form input, .wall-form textarea
+   [H] Botón publicar             → .wall-btn
+   [I] Cabecera "Comentarios"     → .wall-section-hdr
+   [J] Tarjeta de cada post       → .wall-note
+   [K] Nombre del autor           → .wall-name
+   [L] Fecha                      → .wall-date
+   [M] Texto del mensaje          → .wall-text
+
+   Para cambiar la paleta entera de una vez, edita las
+   variables --wall-* en :root al principio de este archivo.
+   ─────────────────────────────────────────────────────────── */
+
+/* [A] */
+#win-wall .wbar {
+  background: linear-gradient(180deg, #c9a0b8 0%, #a07090 100%) !important;
+  border-bottom: 1px solid #b888a8;
+}
+
+.wall-win-title {
+  color: #fff !important;
+}
+
+/* [B][C] */
+#wbody-wall {
+  background-color: var(--wall-bg);
+  background-image:
+    radial-gradient(circle, var(--wall-dot-color) 1px, transparent 1px);
+  background-size: 18px 18px;
+  padding: 12px;
+}
+
+/* [D] */
+.wall-h {
+  font-family: var(--wall-font);
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--wall-accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-bottom: 2px dotted var(--wall-border);
+  padding-bottom: 6px;
+  margin-bottom: 3px;
+}
+
+/* [E] */
+.wall-sub {
+  font-family: var(--wall-font);
+  font-size: .65rem;
+  color: var(--wall-text2);
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+/* [F] */
+.wall-form {
+  background: var(--wall-card-bg);
+  border: 1px dashed var(--wall-border);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+
+/* [G] */
+.wall-form input,
+.wall-form textarea {
+  width: 100%;
+  border: 1px solid var(--wall-border);
+  border-radius: 2px;
+  padding: 5px 7px;
+  font-family: var(--wall-font);
+  font-size: .78rem;
+  margin-bottom: 6px;
+  background: #fff;
+  color: var(--wall-text);
+  outline: none;
+  resize: vertical;
+}
+
+.wall-form input:focus,
+.wall-form textarea:focus {
+  border-color: var(--wall-accent2);
+  box-shadow: 0 0 0 2px rgba(196, 122, 155, .2);
+}
+
+.wall-form textarea {
+  min-height: 60px;
+}
+
+/* [H] */
+.wall-btn {
+  background: linear-gradient(180deg, var(--wall-accent2) 0%, var(--wall-accent) 100%);
+  color: #fff;
+  border: 1px solid var(--wall-accent);
+  padding: 5px 14px;
+  border-radius: 3px;
+  font-family: var(--wall-font);
+  font-size: .75rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: .5px;
+  transition: filter .1s;
+}
+
+.wall-btn:hover {
+  filter: brightness(1.1);
+}
+
+/* [I] */
+.wall-section-hdr {
+  font-family: var(--wall-font);
+  font-size: .72rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(90deg, var(--wall-accent), var(--wall-accent2));
+  padding: 4px 8px;
+  border-radius: 3px 3px 0 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 1px;
+}
+
+/* [J] */
+.wall-note {
+  background: var(--wall-card-bg);
+  border: 1px solid var(--wall-border);
+  border-left: 3px solid var(--wall-accent2);
+  border-radius: 0 4px 4px 0;
+  padding: 9px 10px;
+  margin-bottom: 6px;
+  box-shadow: 0 1px 4px rgba(139, 74, 107, .1);
+}
+
+.wall-note-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.wall-note-avatar {
+  font-size: 1.4rem;
+  margin-right: 7px;
+  flex-shrink: 0;
+}
+
+/* [K] */
+.wall-name {
+  font-family: var(--wall-font);
+  font-weight: 700;
+  color: var(--wall-accent);
+  font-size: .8rem;
+}
+
+/* [L] */
+.wall-date {
+  font-family: var(--wall-font);
+  font-size: .58rem;
+  color: var(--wall-text2);
+}
+
+/* [M] */
+.wall-text {
+  font-family: var(--wall-font);
+  font-size: .78rem;
+  color: var(--wall-text);
+  line-height: 1.5;
+  border-top: 1px dashed var(--wall-border);
+  padding-top: 5px;
+  margin-top: 4px;
+}
+
+/* ── DOCK ──────────────────────────────────────────────────── */
 #dock {
   position: fixed;
   bottom: 12px;
@@ -808,12 +1005,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* ─────────────────────────────────────────────────────────────────
-     DOCK ICONOS: para usar imagen en lugar de emoji, pon dentro:
-     <img src="ruta/imagen.png" style="width:36px;height:36px;border-radius:8px;object-fit:cover"/>
-     ───────────────────────────────────────────────────────────────── */
 }
-
 
 .ig-icon {
   position: relative;
@@ -853,7 +1045,6 @@ body {
 
 .dicon-lbl {
   font-size: .55rem;
-
   opacity: 0;
   transition: opacity .15s;
   position: absolute;
@@ -866,8 +1057,7 @@ body {
   opacity: 1;
 }
 
-
-/* GALERÍA */
+/* ── GALERÍA ───────────────────────────────────────────────── */
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -903,21 +1093,19 @@ body {
 
 .gallery-title {
   color: var(--text);
-  font-family: 'Special Elite', monospace;
   font-size: .78rem;
   margin-bottom: 3px;
+  letter-spacing: 0;
 }
 
 .gallery-desc {
   color: var(--text2);
-  font-family: 'IM Fell English', serif;
   font-size: .72rem;
   line-height: 1.35;
 }
 
 .gallery-date {
   color: var(--accent2);
-  font-family: 'Courier Prime', monospace;
   font-size: .62rem;
   margin-top: 5px;
 }
@@ -927,7 +1115,6 @@ body {
   border-radius: 10px;
   padding: 16px;
   color: var(--text2);
-  font-family: 'Courier Prime', monospace;
   font-size: .76rem;
   line-height: 1.55;
 }
@@ -965,14 +1152,12 @@ body {
 }
 
 #gallery-lightbox-title {
-  font-family: 'Special Elite', monospace;
   color: var(--accent);
   font-size: 1rem;
   margin-bottom: 4px;
 }
 
 #gallery-lightbox-desc {
-  font-family: 'IM Fell English', serif;
   color: var(--text2);
   font-size: .9rem;
 }

@@ -5,20 +5,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>esteticarelacional</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Special+Elite&family=Courier+Prime:ital@0;1&display=swap"
-    rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
 
-  <!-- HIDDEN AUDIO ELEMENT — persiste entre ventanas -->
-  <!-- ═══════════════════════════════════════════════════════════════
-     AUDIO: el iPod carga archivos desde tu ordenador vía FileReader.
-     Si quieres poner una URL de audio fija, cambia audio.src aquí:
-     <audio id="player" src="https://tu-url.com/cancion.mp3"></audio>
-     ═══════════════════════════════════════════════════════════════ -->
   <audio id="player"></audio>
 
   <!-- BOOT -->
@@ -36,56 +27,39 @@
       <span id="clock"></span>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════
-       ICONOS DE ESCRITORIO — posiciones absolutas (top/left)
-       Para cambiar un emoji por imagen, dentro de .dsk-icon-img
-       sustituye el span por:
-       <img src="ruta/icono.png" style="width:48px;height:48px;border-radius:10px;object-fit:cover"/>
-       ═══════════════════════════════════════════════════════════ -->
-
     <!-- Icono: Mis Escritos -->
-    <div class="dsk-icon" style="top:52px;left:28px" onclick="openWin('win-entries')">
-      <div class="dsk-icon-img"><img src="img/notas.png"
-          style="width:48px;height:48px;border-radius:10px;object-fit:cover" /></div>
-      <!-- IMAGEN: sustituye 📖 por <img src="iconos/escritos.png" style="width:48px;height:48px;border-radius:10px;object-fit:cover"/> -->
+    <div class="dsk-icon dsk-icon--entries" onclick="openWin('win-entries')">
+      <div class="dsk-icon-img"><img src="img/notas.png" /></div>
       <span class="dsk-icon-lbl">Notas</span>
     </div>
 
     <!-- Icono: Buscador -->
-    <div class="dsk-icon" style="top:160px;left:90px" onclick="openWin('win-search')">
-      <div class="dsk-icon-img"><img src="img/safari.png"
-          style="width:48px;height:48px;border-radius:10px;object-fit:cover" /></div>
-      <!-- IMAGEN: sustituye 🔍 por <img src="iconos/buscar.png" style="width:48px;height:48px;border-radius:10px;object-fit:cover"/> -->
+    <div class="dsk-icon dsk-icon--search" onclick="openWin('win-search')">
+      <div class="dsk-icon-img"><img src="img/safari.png" /></div>
       <span class="dsk-icon-lbl">Buscador</span>
     </div>
 
     <!-- Icono: Calendario -->
-    <div class="dsk-icon" style="top:257px;left:150px" onclick="openWin('win-cal')">
-      <div class="dsk-icon-img"><img src="img/calendario.png"
-          style="width:48px;height:48px;border-radius:10px;object-fit:cover" /></div>
-      <!-- IMAGEN: sustituye 📅 por <img src="iconos/calendario.png" style="width:48px;height:48px;border-radius:10px;object-fit:cover"/> -->
+    <div class="dsk-icon dsk-icon--cal" onclick="openWin('win-cal')">
+      <div class="dsk-icon-img"><img src="img/calendario.png" /></div>
       <span class="dsk-icon-lbl">Calendario</span>
     </div>
 
     <!-- Icono: iPod -->
-    <div class="dsk-icon" style="top:270px;left:22px" onclick="openWin('win-ipod')">
-      <div class="dsk-icon-img"><img src="img/musica.png"
-          style="width:48px;height:48px;border-radius:10px;object-fit:cover" /></div>
-      <!-- IMAGEN: sustituye 🎵 por <img src="iconos/ipod.png" style="width:48px;height:48px;border-radius:10px;object-fit:cover"/> -->
+    <div class="dsk-icon dsk-icon--ipod" onclick="openWin('win-ipod')">
+      <div class="dsk-icon-img"><img src="img/musica.png" /></div>
       <span class="dsk-icon-lbl">iPod</span>
     </div>
 
     <!-- Icono: Galería -->
-    <div class="dsk-icon" style="top:393px;left:155px" onclick="openWin('win-gallery')">
-      <div class="dsk-icon-img"><img src="img/galeria.png"
-          style="width:48px;height:48px;border-radius:10px;object-fit:cover" /></div>
-      <!-- IMAGEN: sustituye 🖼️ por <img src="img/galeria-icono.png" style="width:48px;height:48px;border-radius:10px;object-fit:cover"/> -->
+    <div class="dsk-icon dsk-icon--gallery" onclick="openWin('win-gallery')">
+      <div class="dsk-icon-img"><img src="img/galeria.png" /></div>
       <span class="dsk-icon-lbl">Galería</span>
     </div>
 
 
     <!-- WIN: MIS ESCRITOS -->
-    <div class="win open" id="win-entries" style="width:360px;height:440px;top:60px;left:140px;">
+    <div class="win open" id="win-entries">
       <div class="wbar">
         <div class="wdot r" onclick="closeWin('win-entries')"></div>
         <div class="wdot y"></div>
@@ -97,7 +71,7 @@
     </div>
 
     <!-- WIN: LECTOR -->
-    <div class="win" id="win-reader" style="width:400px;height:460px;top:80px;left:220px;">
+    <div class="win" id="win-reader">
       <div class="wbar">
         <div class="wdot r" onclick="closeWin('win-reader')"></div>
         <div class="wdot y"></div>
@@ -109,7 +83,7 @@
     </div>
 
     <!-- WIN: BUSCADOR -->
-    <div class="win" id="win-search" style="width:320px;height:380px;top:55px;left:520px;">
+    <div class="win" id="win-search">
       <div class="wbar">
         <div class="wdot r" onclick="closeWin('win-search')"></div>
         <div class="wdot y"></div>
@@ -124,7 +98,7 @@
     </div>
 
     <!-- WIN: CALENDARIO -->
-    <div class="win" id="win-cal" style="width:310px;height:460px;top:70px;left:360px;">
+    <div class="win" id="win-cal">
       <div class="wbar">
         <div class="wdot r" onclick="closeWin('win-cal')"></div>
         <div class="wdot y"></div>
@@ -144,7 +118,7 @@
     </div>
 
     <!-- WIN: iPOD -->
-    <div class="win" id="win-ipod" style="width:240px;height:430px;top:55px;left:600px;">
+    <div class="win" id="win-ipod">
       <div class="wbar">
         <div class="wdot r" onclick="closeWin('win-ipod')"></div>
         <div class="wdot y"></div>
@@ -160,7 +134,6 @@
             </div>
             <div id="ipod-screen-content"></div>
           </div>
-          <!-- click wheel -->
           <div class="cwheel">
             <span class="cwheel-btn cw-top" onclick="ipodAction('menu')">MENU</span>
             <span class="cwheel-btn cw-bot" onclick="ipodAction('play')">▶⏸</span>
@@ -172,28 +145,29 @@
       </div>
     </div>
 
-    <!-- WIN: MURO MYSPACE -->
-    <div class="win" id="win-wall" style="width:360px;height:460px;top:62px;left:440px;">
+    <!-- WIN: MURO SPACEHEY -->
+    <div class="win" id="win-wall">
       <div class="wbar">
         <div class="wdot r" onclick="closeWin('win-wall')"></div>
         <div class="wdot y"></div>
         <div class="wdot g"></div>
-        <span class="wtitle" style="font-family:'Comic Sans MS',cursive;color:#ffccee;">💌 Mi Muro</span>
+        <span class="wtitle wall-win-title">💌 Comentarios</span>
       </div>
       <div class="wbody" id="wbody-wall">
-        <div class="wall-h">✨ ¡Deja tu huella! ✨</div>
-        <div class="wall-sub">— firma el muro y deja un mensaje 4ever —</div>
+        <div class="wall-h">💌 COMENTARIOS DEL PERFIL</div>
+        <div class="wall-sub">— deja un mensaje para Lucía —</div>
         <div class="wall-form">
-          <input id="wall-name" placeholder="Tu nombre o alias xD" maxlength="40" />
-          <textarea id="wall-msg" placeholder="Escribe tu mensaje ☆*:.｡.o(≧▽≦)o.｡.:*☆" maxlength="300"></textarea>
-          <button class="wall-btn" onclick="postWall()">💾 Publicar en el muro</button>
+          <input id="wall-name" placeholder="Tu nombre o alias" maxlength="40" />
+          <textarea id="wall-msg" placeholder="Escribe tu mensaje..." maxlength="300"></textarea>
+          <button class="wall-btn" onclick="postWall()">Publicar comentario</button>
         </div>
+        <div class="wall-section-hdr">Comentarios</div>
         <div id="wall-posts"></div>
       </div>
     </div>
 
     <!-- WIN: GALERÍA -->
-    <div class="win" id="win-gallery" style="width:520px;height:440px;top:82px;left:300px;">
+    <div class="win" id="win-gallery">
       <div class="wbar">
         <div class="wdot r" onclick="closeWin('win-gallery')"></div>
         <div class="wdot y"></div>
@@ -203,6 +177,7 @@
       <div class="wbody" id="wbody-gallery"></div>
       <div class="wresize"></div>
     </div>
+
     <!-- DOCK -->
     <div id="dock">
       <a class="dicon" href="https://www.instagram.com/esteticarelacional/" target="_blank" rel="noopener noreferrer"
@@ -221,6 +196,7 @@
       </div>
     </div>
   </div>
+
   <div id="gallery-lightbox" onclick="closeGalleryLightbox(event)">
     <button class="gallery-close" type="button" onclick="closeGalleryLightbox(event)">×</button>
     <img id="gallery-lightbox-img" src="" alt="" />
