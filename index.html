@@ -75,16 +75,10 @@
       <span class="dsk-icon-lbl">iPod</span>
     </div>
 
-    <!-- Icono: Muro -->
-    <div class="dsk-icon" style="top:393px;left:61px" onclick="openWin('win-wall')">
-      <div class="dsk-icon-img">💌</div>
-      <!-- IMAGEN: sustituye 💌 por <img src="iconos/muro.png" style="width:48px;height:48px;border-radius:10px;object-fit:cover"/> -->
-      <span class="dsk-icon-lbl">Mi Muro</span>
-    </div>
-
     <!-- Icono: Galería -->
     <div class="dsk-icon" style="top:393px;left:155px" onclick="openWin('win-gallery')">
-      <div class="dsk-icon-img">🖼️</div>
+      <div class="dsk-icon-img"><img src="img/galeria.png"
+          style="width:48px;height:48px;border-radius:10px;object-fit:cover" /></div>
       <!-- IMAGEN: sustituye 🖼️ por <img src="img/galeria-icono.png" style="width:48px;height:48px;border-radius:10px;object-fit:cover"/> -->
       <span class="dsk-icon-lbl">Galería</span>
     </div>
@@ -209,31 +203,18 @@
       <div class="wbody" id="wbody-gallery"></div>
       <div class="wresize"></div>
     </div>
-
     <!-- DOCK -->
     <div id="dock">
-      <!-- DOCK ICONOS: ve al CSS .dicon-em para instrucciones de imagen -->
-      <div class="dicon" onclick="openWin('win-entries')">
-        <div class="dicon-em">📖</div>
-        <!-- IMAGEN DOCK: sustituye 📖 por <img src="iconos/escritos.png" style="width:36px;height:36px;border-radius:8px;object-fit:cover"/> -->
-        <span class="dicon-lbl">Escritos</span>
-      </div>
-      <div class="dicon" onclick="openWin('win-search')">
-        <div class="dicon-em">🔍</div>
-        <span class="dicon-lbl">Buscar</span>
-      </div>
-      <div class="dicon" onclick="openWin('win-cal')">
-        <div class="dicon-em">📅</div>
-        <span class="dicon-lbl">Calendario</span>
-      </div>
-      <div class="dicon" onclick="openWin('win-gallery')">
-        <div class="dicon-em">🖼️</div>
-        <span class="dicon-lbl">Galería</span>
-      </div>
-      <div class="dicon" onclick="openWin('win-ipod')">
-        <div class="dicon-em">🎵</div>
-        <span class="dicon-lbl">iPod</span>
-      </div>
+      <a class="dicon" href="https://www.instagram.com/esteticarelacional/" target="_blank" rel="noopener noreferrer"
+        aria-label="Abrir Instagram @esteticarelacional">
+        <div class="dicon-em ig-icon" aria-hidden="true"></div>
+        <span class="dicon-lbl">@esteticarelacional</span>
+      </a>
+      <a class="dicon" href="https://www.instagram.com/luxtequiero/" target="_blank" rel="noopener noreferrer"
+        aria-label="Abrir Instagram @luxtequiero">
+        <div class="dicon-em ig-icon" aria-hidden="true"></div>
+        <span class="dicon-lbl">@luxtequiero</span>
+      </a>
       <div class="dicon" onclick="openWin('win-wall')">
         <div class="dicon-em">💌</div>
         <span class="dicon-lbl">Muro</span>
