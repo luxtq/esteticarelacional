@@ -825,3 +825,133 @@
     .dicon:hover .dicon-lbl {
       opacity: 1;
     }
+
+
+/* GALERÍA */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+.gallery-card {
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid var(--win-border);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .15s, border-color .15s, background .15s;
+}
+
+.gallery-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent2);
+  background: rgba(200, 169, 126, .08);
+}
+
+.gallery-thumb {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  background: rgba(0, 0, 0, .25);
+}
+
+.gallery-meta {
+  padding: 8px;
+}
+
+.gallery-title {
+  color: var(--text);
+  font-family: 'Special Elite', monospace;
+  font-size: .78rem;
+  margin-bottom: 3px;
+}
+
+.gallery-desc {
+  color: var(--text2);
+  font-family: 'IM Fell English', serif;
+  font-size: .72rem;
+  line-height: 1.35;
+}
+
+.gallery-date {
+  color: var(--accent2);
+  font-family: 'Courier Prime', monospace;
+  font-size: .62rem;
+  margin-top: 5px;
+}
+
+.gallery-help {
+  border: 1px dashed var(--win-border);
+  border-radius: 10px;
+  padding: 16px;
+  color: var(--text2);
+  font-family: 'Courier Prime', monospace;
+  font-size: .76rem;
+  line-height: 1.55;
+}
+
+#gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  padding: 28px;
+  background: rgba(0, 0, 0, .82);
+  backdrop-filter: blur(10px);
+  z-index: 99999;
+}
+
+#gallery-lightbox.open {
+  display: flex;
+}
+
+#gallery-lightbox-img {
+  max-width: min(88vw, 1000px);
+  max-height: 76vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .8);
+}
+
+.gallery-lightbox-caption {
+  max-width: min(88vw, 800px);
+  text-align: center;
+  color: var(--text);
+}
+
+#gallery-lightbox-title {
+  font-family: 'Special Elite', monospace;
+  color: var(--accent);
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+#gallery-lightbox-desc {
+  font-family: 'IM Fell English', serif;
+  color: var(--text2);
+  font-size: .9rem;
+}
+
+.gallery-close {
+  position: fixed;
+  top: 18px;
+  right: 22px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .08);
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.gallery-close:hover {
+  background: rgba(255, 255, 255, .16);
+}

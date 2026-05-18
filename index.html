@@ -60,7 +60,7 @@
     </div>
 
     <!-- Icono: Calendario -->
-    <div class="dsk-icon" style="top:48px;left:640px" onclick="openWin('win-cal')">
+    <div class="dsk-icon" style="top:257px;left:150px" onclick="openWin('win-cal')">
       <div class="dsk-icon-img"><img src="img/calendario.png"
           style="width:48px;height:48px;border-radius:10px;object-fit:cover" /></div>
       <!-- IMAGEN: sustituye 📅 por <img src="iconos/calendario.png" style="width:48px;height:48px;border-radius:10px;object-fit:cover"/> -->
@@ -76,10 +76,17 @@
     </div>
 
     <!-- Icono: Muro -->
-    <div class="dsk-icon" style="top:200px;left:700px" onclick="openWin('win-wall')">
+    <div class="dsk-icon" style="top:393px;left:61px" onclick="openWin('win-wall')">
       <div class="dsk-icon-img">💌</div>
       <!-- IMAGEN: sustituye 💌 por <img src="iconos/muro.png" style="width:48px;height:48px;border-radius:10px;object-fit:cover"/> -->
       <span class="dsk-icon-lbl">Mi Muro</span>
+    </div>
+
+    <!-- Icono: Galería -->
+    <div class="dsk-icon" style="top:393px;left:155px" onclick="openWin('win-gallery')">
+      <div class="dsk-icon-img">🖼️</div>
+      <!-- IMAGEN: sustituye 🖼️ por <img src="img/galeria-icono.png" style="width:48px;height:48px;border-radius:10px;object-fit:cover"/> -->
+      <span class="dsk-icon-lbl">Galería</span>
     </div>
 
 
@@ -191,6 +198,18 @@
       </div>
     </div>
 
+    <!-- WIN: GALERÍA -->
+    <div class="win" id="win-gallery" style="width:520px;height:440px;top:82px;left:300px;">
+      <div class="wbar">
+        <div class="wdot r" onclick="closeWin('win-gallery')"></div>
+        <div class="wdot y"></div>
+        <div class="wdot g"></div>
+        <span class="wtitle">🖼️ Galería</span>
+      </div>
+      <div class="wbody" id="wbody-gallery"></div>
+      <div class="wresize"></div>
+    </div>
+
     <!-- DOCK -->
     <div id="dock">
       <!-- DOCK ICONOS: ve al CSS .dicon-em para instrucciones de imagen -->
@@ -207,6 +226,10 @@
         <div class="dicon-em">📅</div>
         <span class="dicon-lbl">Calendario</span>
       </div>
+      <div class="dicon" onclick="openWin('win-gallery')">
+        <div class="dicon-em">🖼️</div>
+        <span class="dicon-lbl">Galería</span>
+      </div>
       <div class="dicon" onclick="openWin('win-ipod')">
         <div class="dicon-em">🎵</div>
         <span class="dicon-lbl">iPod</span>
@@ -217,6 +240,15 @@
       </div>
     </div>
   </div>
+  <div id="gallery-lightbox" onclick="closeGalleryLightbox(event)">
+    <button class="gallery-close" type="button" onclick="closeGalleryLightbox(event)">×</button>
+    <img id="gallery-lightbox-img" src="" alt="" />
+    <div class="gallery-lightbox-caption">
+      <div id="gallery-lightbox-title"></div>
+      <div id="gallery-lightbox-desc"></div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 
